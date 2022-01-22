@@ -1,0 +1,25 @@
+{{- if .Values.heimdallImage.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "polygon.fullname" . }}-heimdall
+  labels:
+    {{- include "polygon.heimdallLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 1317
+      targetPort: restfulapi
+      protocol: TCP
+      name: restfulapi
+    - port: 26657
+      targetPort: rpc
+      protocol: TCP
+      name: rpc
+    - port: 26656
+      targetPort: p2p
+      protocol: TCP
+      name: p2p
+  selector:
+    {{- include "polygon.heimdallSelectorLabels" . | nindent 4 }}
+{{- end }}

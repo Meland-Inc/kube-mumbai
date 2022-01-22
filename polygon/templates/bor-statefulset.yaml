@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "polygon.fullname" . }}-bor
+  labels:
+    {{- include "polygon.borLabels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ template "polygon.name" . }}-bor
+  selector:
+    matchLabels:
+      {{- include "polygon.borSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "polygon.borSelectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: bor
+        image: {{ .Values.borImage.repository }}:{{ .Values.borImage.tag }}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","sleep 180"]
+        env:
+        - name: HEIMDALL_ADDRESS
+          value: {{ include "heimdall.address" . }}
+        ports:
+        - containerPort: 8545
+          name: rpc
+        - containerPort: 8546
+          name: ws
+        - containerPort: 30303
+          name: peers-tcp
+        - containerPort: 30303
+          name: peers-udp
+        volumeMounts:
+          - name: bor-storage
+            mountPath: /root/bor_data
+        resources:
+{{ toYaml .Values.borResources | indent 10 }}
+  {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: bor-storage
+          persistentVolumeClaim:
+            claimName: {{ template "polygon.fullname" . }}-bor
+  {{- else }}
+      volumes:
+        - name: bor-storage
+          emptyDir: {}
+  {{- end }}

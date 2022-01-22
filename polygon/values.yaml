@@ -1,0 +1,85 @@
+# Default values for polygon.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+borImage:
+  repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-polygon-bor
+  pullPolicy: IfNotPresent
+  tag: "c23b083"
+
+heimdallImage:
+  enabled: false
+  repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-polygon-heimdall
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: 14cb755
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  baseHost: fast-mumbai.melandworld.com
+  tls: []
+
+heimdallResources:
+  limits:
+    cpu: 2
+    memory: 4Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+borResources:
+  limits:
+    cpu: 12
+    memory: 30Gi
+  requests:
+    cpu: 12
+    memory: 30Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+persistence:
+  accessModes:
+    - ReadWriteOnce
+  enabled: true
+  storageClass: gp2
+  size: 2Ti
+
+heimdallAddress: "polygon-full-node-heimdall"

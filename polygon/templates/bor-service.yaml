@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "polygon.fullname" . }}-bor
+  labels:
+    {{- include "polygon.borLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 8545
+      targetPort: rpc
+      protocol: TCP
+      name: rpc
+    - port: 8546
+      targetPort: ws
+      protocol: TCP
+      name: ws
+    - port: 30303
+      targetPort: peers-udp
+      protocol: UDP
+      name: peers-udp
+    - port: 30303
+      targetPort: peers-tcp
+      protocol: TCP
+      name: peers-tcp
+  selector:
+    {{- include "polygon.borSelectorLabels" . | nindent 4 }}

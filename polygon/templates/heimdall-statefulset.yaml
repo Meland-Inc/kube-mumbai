@@ -1,0 +1,44 @@
+{{- if .Values.heimdallImage.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "polygon.fullname" . }}-heimdall
+  labels:
+    {{- include "polygon.borLabels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ template "polygon.name" . }}-heimdall
+  selector:
+    matchLabels:
+      {{- include "polygon.heimdallSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "polygon.heimdallSelectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: heimdall
+        image: {{ .Values.heimdallImage.repository }}:{{ .Values.heimdallImage.tag }}
+        ports:
+        - containerPort: 26656
+          name: p2p
+        - containerPort: 26657
+          name: rpc
+        - containerPort: 1317
+          name: restfulapi
+        volumeMounts:
+          - name: heimdall-storage
+            mountPath: /root/heimdall_data
+        resources:
+{{ toYaml .Values.heimdallResources | indent 10 }}
+  {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: heimdall-storage
+          persistentVolumeClaim:
+            claimName: {{ template "polygon.fullname" . }}-heimdall
+  {{- else }}
+      volumes:
+        - name: heimdall-storage
+          emptyDir: {}
+  {{- end }}
+{{- end }}
