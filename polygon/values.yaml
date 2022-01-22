@@ -5,16 +5,16 @@
 replicaCount: 1
 
 borImage:
-  repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-polygon-bor
+  repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-mumbai-bor
   pullPolicy: IfNotPresent
-  tag: "c23b083"
+  tag: "4de59ce"
 
 heimdallImage:
-  enabled: false
-  repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-polygon-heimdall
+  enabled: true
+  repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-mumbai-heimdall
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 14cb755
+  tag: "4de59ce"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -63,11 +63,11 @@ heimdallResources:
 
 borResources:
   limits:
-    cpu: 12
-    memory: 30Gi
+    cpu: 6
+    memory: 10Gi
   requests:
-    cpu: 12
-    memory: 30Gi
+    cpu: 4
+    memory: 8Gi
 
 nodeSelector: {}
 
@@ -82,4 +82,4 @@ persistence:
   storageClass: gp2
   size: 2Ti
 
-heimdallAddress: "polygon-full-node-heimdall"
+heimdallAddress: ""

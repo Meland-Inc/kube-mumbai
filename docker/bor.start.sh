@@ -14,7 +14,7 @@ init() {
     fi
     mkdir -p $HOME/bor_data
     mkdir -p $HOME/bor_data/data
-    wget https://raw.githubusercontent.com/maticnetwork/launch/master/mainnet-v1/sentry/sentry/bor/genesis.json
+    wget https://raw.githubusercontent.com/maticnetwork/launch/master/testnet-v4/sentry/sentry/bor/genesis.json
     cp -rf genesis.json $HOME/bor_data/gensis.json
     bor --datadir $HOME/bor_data/data init genesis.json
     wget -c https://matic-blockchain-snapshots.s3-accelerate.amazonaws.com/matic-mumbai/bor-fullnode-node-snapshot-2022-01-17.tar.gz -O - | tar -xz -C $HOME/bor_data/data
