@@ -7,14 +7,14 @@ replicaCount: 1
 borImage:
   repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-mumbai-bor
   pullPolicy: IfNotPresent
-  tag: "4de59ce"
+  tag: "44cdcad"
 
 heimdallImage:
   enabled: true
   repository: 436271674037.dkr.ecr.ap-southeast-1.amazonaws.com/kube-mumbai-heimdall
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "4de59ce"
+  tag: "44cdcad"
 
 imagePullSecrets: []
 nameOverride: ""

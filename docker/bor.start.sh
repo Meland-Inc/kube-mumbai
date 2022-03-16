@@ -34,7 +34,7 @@ start() {
         --http.api 'debug,eth,net,web3,txpool,bor' \
         --ws.api 'debug,eth,net,web3,txpool,bor' \
         --syncmode 'fast' \
-        --bor.heimdall="http://${HEIMDALL_ADDRESS}:1317" \
+        --bor.heimdall="https://heimdall.api.matic.today" \
         --gcmode 'full' \
         --networkid '80001' \
         --miner.gaslimit '200000000' \
@@ -53,19 +53,6 @@ default() {
     echo "{}"
 }
 
-wait() {
-    while true; do
-        sleep 1
-        catching_up=$((curl http://$HEIMDALL_ADDRESS:26657/status || default) | jq -r '.result.sync_info.catching_up')
-        echo "wait for catching_up: $catching_up";
-        if [ "$catching_up" == "false" ]; then
-            break
-        fi
-    done
-}
-
 init
-
-wait
 
 start
